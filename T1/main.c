@@ -1,24 +1,28 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <windows.h>
 
 void lerMatriz(FILE *arquivo, int **matriz, int tamanho);
 void multiplicarMatrizes(int **A, int **B, int **C, int tamanho);
 void imprimirMatriz(FILE *arquivo, int **matriz, int tamanho);
 
-int main(int argc, char *argv[]) {
-    FILE *arquivoEntrada;
+double getTime() {
+    LARGE_INTEGER frequency, start;
+    QueryPerformanceFrequency(&frequency);
+    QueryPerformanceCounter(&start);
+    return (double)start.QuadPart / frequency.QuadPart;
+}
 
-    if (argc < 2) {
-        arquivoEntrada = fopen("C:/PENTES/SPD/T1/entrada.txt", "r");
-        if (!arquivoEntrada) {
-            perror("Erro ao abrir o arquivo de entrada");
-            return 1;
-        }
+int main(int argc, char *argv[]) {
+    FILE *arquivoEntrada = fopen("C:/PENTES/SPD/T1/entrada.txt", "r");
+    if (!arquivoEntrada) {
+        perror("Erro ao abrir o arquivo de entrada");
+        return 1;
     }
 
     FILE *arquivoSaida = fopen("C:/PENTES/SPD/T1/arquivo_saida.txt", "w");
     if (!arquivoSaida) {
-        perror("Erro ao criar o arquivo de saída");
+        perror("Erro ao criar o arquivo de saida");
         fclose(arquivoEntrada);
         return 1;
     }
@@ -29,7 +33,6 @@ int main(int argc, char *argv[]) {
     int **A = (int **)malloc(tamanho * sizeof(int *));
     int **B = (int **)malloc(tamanho * sizeof(int *));
     int **C = (int **)malloc(tamanho * sizeof(int *));
-
     for (int i = 0; i < tamanho; i++) {
         A[i] = (int *)malloc(tamanho * sizeof(int));
         B[i] = (int *)malloc(tamanho * sizeof(int));
@@ -40,10 +43,11 @@ int main(int argc, char *argv[]) {
     lerMatriz(arquivoEntrada, B, tamanho);
     fclose(arquivoEntrada);
 
+    double start = getTime();
     multiplicarMatrizes(A, B, C, tamanho);
+    double end = getTime();
 
     imprimirMatriz(arquivoSaida, C, tamanho);
-
     fclose(arquivoSaida);
 
     for (int i = 0; i < tamanho; i++) {
@@ -55,6 +59,7 @@ int main(int argc, char *argv[]) {
     free(B);
     free(C);
 
+    printf("Tempo de execucao: %.9f segundos\n", end - start);
     return 0;
 }
 
