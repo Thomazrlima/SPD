@@ -27,6 +27,14 @@ int main(int argc, char *argv[]) {
         return 1;
     }
 
+    FILE *arquivoCSV = fopen("C:/PENTES/SPD/T1/tempo_execucao.csv", "a");
+    if (!arquivoCSV) {
+        perror("Erro ao criar ou abrir o arquivo CSV");
+        fclose(arquivoEntrada);
+        fclose(arquivoSaida);
+        return 1;
+    }
+
     int tamanho;
     fscanf(arquivoEntrada, "%d", &tamanho);
 
@@ -65,7 +73,11 @@ int main(int argc, char *argv[]) {
     free(C);
     free(D);
 
+    fprintf(arquivoCSV, "%d,%.9f\n", tamanho, end - start);
+
     printf("Tempo de execucao: %.9f segundos\n", end - start);
+
+    fclose(arquivoCSV);
 
     return 0;
 }
