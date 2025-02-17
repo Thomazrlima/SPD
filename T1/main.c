@@ -1,15 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <time.h>
 
 void lerMatriz(FILE *arquivo, long long **matriz, int tamanho);
 void multiplicarMatrizes(long long **A, long long **B, long long **C, int tamanho);
 void imprimirMatriz(FILE *arquivo, long long **matriz, int tamanho);
-
-double getTime() {
-    clock_t start = clock();
-    return (double)start / CLOCKS_PER_SEC;
-}
 
 int main(int argc, char *argv[]) {
     if (argc != 4) {
@@ -38,22 +32,13 @@ int main(int argc, char *argv[]) {
         return 1;
     }
 
-    FILE *arquivoCSV = fopen("tempo_execucao.csv", "a");
-    if (!arquivoCSV) {
-        perror("Erro ao criar ou abrir o arquivo CSV");
-        fclose(arquivoEntradaA);
-        fclose(arquivoEntradaB);
-        fclose(C);
-        return 1;
-    }
-
     int tamanho;
     fscanf(arquivoEntradaA, "%d", &tamanho);
 
     long long **A = (long long **)malloc(tamanho * sizeof(long long *));
     long long **B = (long long **)malloc(tamanho * sizeof(long long *));
     long long **matrizC = (long long **)malloc(tamanho * sizeof(long long *));
-
+    
     for (int i = 0; i < tamanho; i++) {
         A[i] = (long long *)malloc(tamanho * sizeof(long long));
         B[i] = (long long *)malloc(tamanho * sizeof(long long));
@@ -65,10 +50,7 @@ int main(int argc, char *argv[]) {
     fclose(arquivoEntradaA);
     fclose(arquivoEntradaB);
 
-    double start = getTime();
     multiplicarMatrizes(A, B, matrizC, tamanho);
-    double end = getTime();
-
     imprimirMatriz(C, matrizC, tamanho);
     fclose(C);
 
@@ -80,12 +62,6 @@ int main(int argc, char *argv[]) {
     free(A);
     free(B);
     free(matrizC);
-
-    fprintf(arquivoCSV, "%d,%.9f\n", tamanho, end - start);
-
-    printf("Tempo de execucao: %.9f segundos\n", end - start);
-
-    fclose(arquivoCSV);
 
     return 0;
 }
