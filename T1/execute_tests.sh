@@ -1,31 +1,24 @@
 #!/bin/bash
 
-# Definindo o nome do arquivo de saída para os tempos
 OUTPUT_CSV="tempos_execucao.csv"
+echo "Teste,Tamanho,Real,User,Sys" > $OUTPUT_CSV
 
-# Inicializa o arquivo CSV com um cabeçalho
-echo "Teste,Tempo (segundos)" > $OUTPUT_CSV
-
-# Executa 15 testes
 for i in {1..15}
 do
-    # Nome dos arquivos de entrada e saída
     ARQUIVO_A="A.txt"
     ARQUIVO_B="B.txt"
-    ARQUIVO_SAIDA="C_saida_${i}.txt"
+    ARQUIVO_C="C_saida_${i}.txt"
 
-    # Inicia a contagem do tempo
-    START_TIME=$(date +%s.%N)
+    MATRIX_SIZE=$(wc -l < "$ARQUIVO_A")
 
-    # Executa o programa C com os arquivos fornecidos
-    ./programa $ARQUIVO_A $ARQUIVO_B $ARQUIVO_SAIDA
+    { time ./programa $MATRIX_SIZE $ARQUIVO_A $ARQUIVO_B $ARQUIVO_C; } 2> tempo.txt
 
-    # Marca o tempo de execução
-    END_TIME=$(date +%s.%N)
-    EXEC_TIME=$(echo "$END_TIME - $START_TIME" | bc)
+    REAL_TIME=$(grep real tempo.txt | awk '{print $2}')
+    USER_TIME=$(grep user tempo.txt | awk '{print $2}')
+    SYS_TIME=$(grep sys tempo.txt | awk '{print $2}')
 
-    # Grava o tempo no arquivo CSV
-    echo "$i,$EXEC_TIME" >> $OUTPUT_CSV
-
-    echo "Teste $i: $EXEC_TIME segundos"
+    echo "$i,$MATRIX_SIZE,$REAL_TIME,$USER_TIME,$SYS_TIME" >> $OUTPUT_CSV
+    echo "Teste $i: Tamanho=$MATRIX_SIZE, Real=$REAL_TIME, User=$USER_TIME, Sys=$SYS_TIME"
 done
+
+rm tempo.txt
