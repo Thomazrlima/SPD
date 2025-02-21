@@ -2,9 +2,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define MASTER 0               /* ID da tarefa mestre */
-#define FROM_MASTER 1          /* tipo de mensagem */
-#define FROM_WORKER 2          /* tipo de mensagem */
+#define MASTER 0
+#define FROM_MASTER 1
+#define FROM_WORKER 2
 
 void read_matrix_from_file(const char *filename, double *matrix, int N) {
     FILE *file = fopen(filename, "r");
@@ -54,22 +54,19 @@ int main(int argc, char *argv[]) {
     double *a, *b, *c;         /* Matrizes A, B e C */
     MPI_Status status;
 
-    /* Verificando os argumentos */
     if (argc != 4) {
         printf("Uso: %s <tamanho da matriz quadrada> <arquivo matriz A> <arquivo matriz B>\n", argv[0]);
         exit(1);
     }
 
-    N = atoi(argv[1]);  /* Lê o tamanho da matriz quadrada */
-    const char *file_a = argv[2];  /* Arquivo para matriz A */
-    const char *file_b = argv[3];  /* Arquivo para matriz B */
+    N = atoi(argv[1]);
+    const char *file_a = argv[2];
+    const char *file_b = argv[3];
 
-    /* Aloca as matrizes dinamicamente */
     a = (double *)malloc(N * N * sizeof(double));
     b = (double *)malloc(N * N * sizeof(double));
     c = (double *)malloc(N * N * sizeof(double));
 
-    /* Lê as matrizes dos arquivos */
     read_matrix_from_file(file_a, a, N);
     read_matrix_from_file(file_b, b, N);
 
@@ -97,7 +94,7 @@ int main(int argc, char *argv[]) {
         /* Enviar a matriz A para todos os trabalhadores */
         mtype = FROM_MASTER;
         for (dest = 1; dest <= numworkers; dest++) {
-            MPI_Send(a, N * N, MPI_DOUBLE, dest, mtype, MPI_COMM_WORLD);  // Envia toda a matriz A
+            MPI_Send(a, N * N, MPI_DOUBLE, dest, mtype, MPI_COMM_WORLD);
         }
 
         /* Distribuir a matriz B para os trabalhadores, uma parte de B por vez */
@@ -126,7 +123,6 @@ int main(int argc, char *argv[]) {
             printf("Resultados recebidos da tarefa %d\n", source);
         }
 
-        /* Salvar o resultado em um arquivo C.txt */
         write_matrix_to_file("C.txt", c, N);
         printf("Resultado salvo em C.txt.\n");
     }
@@ -148,7 +144,7 @@ int main(int argc, char *argv[]) {
         for (i = 0; i < rows; i++) {
             c[i * N + k] = 0.0;
             for (j = 0; j < N; j++) 
-                c[i * N + k] += a[i * N + j] * b[j * N + k];  // Ajuste no acesso a b[j * N + k]
+                c[i * N + k] += a[i * N + j] * b[j * N + k];
         }
     
 
@@ -159,7 +155,6 @@ int main(int argc, char *argv[]) {
         MPI_Send(c, rows * N, MPI_DOUBLE, MASTER, mtype, MPI_COMM_WORLD);
     }
 
-    /* Libera a memória alocada */
     free(a);
     free(b);
     free(c);
