@@ -3,11 +3,11 @@
 
 void lerMatriz(FILE *arquivo, long long **matriz, int tamanho);
 void multiplicarMatrizes(long long **A, long long **B, long long **C, int tamanho);
-void imprimirMatriz(FILE *arquivo, long long **matriz, int tamanho);
+void imprimirMatriz(long long **matriz, int tamanho);
 
 int main(int argc, char *argv[]) {
-    if (argc != 5) {
-        printf("Uso: %s <tamanho> <arquivoA> <arquivoB> <arquivoC>\n", argv[0]);
+    if (argc != 4) {
+        printf("Uso: %s <tamanho> <arquivoA> <arquivoB>\n", argv[0]);
         return 1;
     }
 
@@ -30,14 +30,6 @@ int main(int argc, char *argv[]) {
         return 1;
     }
 
-    FILE *arquivoSaida = fopen(argv[4], "w");
-    if (!arquivoSaida) {
-        perror("Erro ao criar o arquivo de saída");
-        fclose(arquivoEntradaA);
-        fclose(arquivoEntradaB);
-        return 1;
-    }
-
     long long **A = (long long **)malloc(tamanho * sizeof(long long *));
     long long **B = (long long **)malloc(tamanho * sizeof(long long *));
     long long **C = (long long **)malloc(tamanho * sizeof(long long *));
@@ -54,8 +46,7 @@ int main(int argc, char *argv[]) {
     fclose(arquivoEntradaB);
 
     multiplicarMatrizes(A, B, C, tamanho);
-    imprimirMatriz(arquivoSaida, C, tamanho);
-    fclose(arquivoSaida);
+    imprimirMatriz(C, tamanho);
 
     for (int i = 0; i < tamanho; i++) {
         free(A[i]);
@@ -88,11 +79,19 @@ void multiplicarMatrizes(long long **A, long long **B, long long **C, int tamanh
     }
 }
 
-void imprimirMatriz(FILE *arquivo, long long **matriz, int tamanho) {
+void imprimirMatriz(long long **matriz, int tamanho) {
+    FILE *arquivoSaida = fopen("C.txt", "w");
+    if (!arquivoSaida) {
+        perror("Erro ao criar o arquivo de saída");
+        return;
+    }
+
     for (int i = 0; i < tamanho; i++) {
         for (int j = 0; j < tamanho; j++) {
-            fprintf(arquivo, "%lld ", matriz[i][j]);
+            fprintf(arquivoSaida, "%lld ", matriz[i][j]);
         }
-        fprintf(arquivo, "\n");
+        fprintf(arquivoSaida, "\n");
     }
+
+    fclose(arquivoSaida);
 }
