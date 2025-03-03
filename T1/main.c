@@ -1,9 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void lerMatriz(FILE *arquivo, long long **matriz, int tamanho);
-void multiplicarMatrizes(long long **A, long long **B, long long **C, int tamanho);
-void imprimirMatriz(long long **matriz, int tamanho);
+void lerMatriz(FILE *arquivo, double **matriz, int tamanho);
+void multiplicarMatrizes(double **A, double **B, double **C, int tamanho);
+void imprimirMatriz(double **matriz, int tamanho);
 
 int main(int argc, char *argv[]) {
     if (argc != 4) {
@@ -30,14 +30,14 @@ int main(int argc, char *argv[]) {
         return 1;
     }
 
-    long long **A = (long long **)malloc(tamanho * sizeof(long long *));
-    long long **B = (long long **)malloc(tamanho * sizeof(long long *));
-    long long **C = (long long **)malloc(tamanho * sizeof(long long *));
+    double **A = (double **)malloc(tamanho * sizeof(double *));
+    double **B = (double **)malloc(tamanho * sizeof(double *));
+    double **C = (double **)malloc(tamanho * sizeof(double *));
     
     for (int i = 0; i < tamanho; i++) {
-        A[i] = (long long *)malloc(tamanho * sizeof(long long));
-        B[i] = (long long *)malloc(tamanho * sizeof(long long));
-        C[i] = (long long *)malloc(tamanho * sizeof(long long));
+        A[i] = (double *)malloc(tamanho * sizeof(double));
+        B[i] = (double *)malloc(tamanho * sizeof(double));
+        C[i] = (double *)malloc(tamanho * sizeof(double));
     }
 
     lerMatriz(arquivoEntradaA, A, tamanho);
@@ -60,18 +60,18 @@ int main(int argc, char *argv[]) {
     return 0;
 }
 
-void lerMatriz(FILE *arquivo, long long **matriz, int tamanho) {
+void lerMatriz(FILE *arquivo, double **matriz, int tamanho) {
     for (int i = 0; i < tamanho; i++) {
         for (int j = 0; j < tamanho; j++) {
-            fscanf(arquivo, "%lld", &matriz[i][j]);
+            fscanf(arquivo, "%lf", &matriz[i][j]);
         }
     }
 }
 
-void multiplicarMatrizes(long long **A, long long **B, long long **C, int tamanho) {
+void multiplicarMatrizes(double **A, double **B, double **C, int tamanho) {
     for (int i = 0; i < tamanho; i++) {
         for (int j = 0; j < tamanho; j++) {
-            C[i][j] = 0;
+            C[i][j] = 0.0;
             for (int k = 0; k < tamanho; k++) {
                 C[i][j] += A[i][k] * B[k][j];
             }
@@ -79,7 +79,7 @@ void multiplicarMatrizes(long long **A, long long **B, long long **C, int tamanh
     }
 }
 
-void imprimirMatriz(long long **matriz, int tamanho) {
+void imprimirMatriz(double **matriz, int tamanho) {
     FILE *arquivoSaida = fopen("C.txt", "w");
     if (!arquivoSaida) {
         perror("Erro ao criar o arquivo de saída");
@@ -88,7 +88,7 @@ void imprimirMatriz(long long **matriz, int tamanho) {
 
     for (int i = 0; i < tamanho; i++) {
         for (int j = 0; j < tamanho; j++) {
-            fprintf(arquivoSaida, "%lld ", matriz[i][j]);
+            fprintf(arquivoSaida, "%.2lf ", matriz[i][j]);
         }
         fprintf(arquivoSaida, "\n");
     }
