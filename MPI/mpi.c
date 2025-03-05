@@ -40,18 +40,9 @@ void write_matrix_to_file(const char *filename, double *matrix, int N) {
 }
 
 int main(int argc, char *argv[]) {
-    int numtasks,              /* número de tarefas na partição */
-        taskid,                /* identificador da tarefa */
-        numworkers,            /* número de tarefas trabalhadoras */
-        source,                /* ID da tarefa de origem */
-        dest,                  /* ID da tarefa de destino */
-        mtype,                 /* tipo de mensagem */
-        rows,                  /* número de linhas da matriz A enviadas a cada trabalhador */
-        averow, extra, offset, /* usados para determinar as linhas enviadas a cada trabalhador */
-        i, j, k, rc;           /* misc */
-    
-    int N;                     /* Tamanho da matriz quadrada */
-    double *a, *b, *c;         /* Matrizes A, B e C */
+    int numtasks, taskid, numworkers, source, dest, mtype, rows, averow, extra, offset, i, j, k;
+    int N;
+    double *a, *b, *c;
     MPI_Status status;
 
     if (argc != 4) {
@@ -76,88 +67,74 @@ int main(int argc, char *argv[]) {
 
     if (numtasks < 2) {
         printf("É necessário pelo menos duas tarefas MPI. Finalizando...\n");
-        MPI_Abort(MPI_COMM_WORLD, rc);
+        MPI_Abort(MPI_COMM_WORLD, 1);
         exit(1);
     }
 
     numworkers = numtasks - 1;
 
-    /**************************** tarefa mestre ************************************/
     if (taskid == MASTER) {
-        printf("Iniciando multiplicação de matrizes com %d tarefas.\n", numtasks);
 
-        /* Inicializa a matriz C com zeros */
-        for (i = 0; i < N; i++) 
-            for (j = 0; j < N; j++) 
-                c[i * N + j] = 0.0;
+        for (i = 0; i < N * N; i++) c[i] = 0.0;
 
-        /* Enviar a matriz A para todos os trabalhadores */
         mtype = FROM_MASTER;
         for (dest = 1; dest <= numworkers; dest++) {
             MPI_Send(a, N * N, MPI_DOUBLE, dest, mtype, MPI_COMM_WORLD);
         }
 
-        /* Distribuir a matriz B para os trabalhadores, uma parte de B por vez */
         averow = N / numworkers;
         extra = N % numworkers;
         offset = 0;
 
         for (dest = 1; dest <= numworkers; dest++) {
-            rows = (dest <= extra) ? averow + 1 : averow; 
-
-            /* Envia a parte correspondente de B */
+            rows = (dest <= extra) ? averow + 1 : averow;
             MPI_Send(&offset, 1, MPI_INT, dest, mtype, MPI_COMM_WORLD);
             MPI_Send(&rows, 1, MPI_INT, dest, mtype, MPI_COMM_WORLD);
-            MPI_Send(&b[offset * N], rows * N, MPI_DOUBLE, dest, mtype, MPI_COMM_WORLD);
-
-            offset = offset + rows;
+            MPI_Send(&b[0], N * N, MPI_DOUBLE, dest, mtype, MPI_COMM_WORLD); // Envia a matriz B inteira
+            offset += rows;
         }
 
-        /* Receber os resultados das tarefas trabalhadoras */
         mtype = FROM_WORKER;
         for (i = 1; i <= numworkers; i++) {
-            source = i;
-            MPI_Recv(&offset, 1, MPI_INT, source, mtype, MPI_COMM_WORLD, &status);
-            MPI_Recv(&rows, 1, MPI_INT, source, mtype, MPI_COMM_WORLD, &status);
-            MPI_Recv(&c[offset * N], rows * N, MPI_DOUBLE, source, mtype, MPI_COMM_WORLD, &status);
-            printf("Resultados recebidos da tarefa %d\n", source);
+            MPI_Recv(&offset, 1, MPI_INT, i, mtype, MPI_COMM_WORLD, &status);
+            MPI_Recv(&rows, 1, MPI_INT, i, mtype, MPI_COMM_WORLD, &status);
+            MPI_Recv(&c[offset * N], rows * N, MPI_DOUBLE, i, mtype, MPI_COMM_WORLD, &status);
         }
 
         write_matrix_to_file("C.txt", c, N);
-        printf("Resultado salvo em C.txt.\n");
     }
 
-    /**************************** tarefa trabalhadora ************************************/
     if (taskid > MASTER) {
         mtype = FROM_MASTER;
-        
-        /* Receber a matriz A */
         MPI_Recv(a, N * N, MPI_DOUBLE, MASTER, mtype, MPI_COMM_WORLD, &status);
-
-        /* Receber a parte correspondente da matriz B */
         MPI_Recv(&offset, 1, MPI_INT, MASTER, mtype, MPI_COMM_WORLD, &status);
         MPI_Recv(&rows, 1, MPI_INT, MASTER, mtype, MPI_COMM_WORLD, &status);
-        MPI_Recv(b, rows * N, MPI_DOUBLE, MASTER, mtype, MPI_COMM_WORLD, &status);
 
-        /* Realizar a multiplicação de matrizes */
-        for (k = 0; k < N; k++) 
+        double *b_part = (double *)malloc(N * N * sizeof(double));
+        MPI_Recv(b_part, N * N, MPI_DOUBLE, MASTER, mtype, MPI_COMM_WORLD, &status);
+
+        double *c_part = (double *)malloc(rows * N * sizeof(double));
+
         for (i = 0; i < rows; i++) {
-            c[i * N + k] = 0.0;
-            for (j = 0; j < N; j++) 
-                c[i * N + k] += a[i * N + j] * b[j * N + k];
+            for (k = 0; k < N; k++) {
+                c_part[i * N + k] = 0.0;
+                for (j = 0; j < N; j++) {
+                    c_part[i * N + k] += a[(offset + i) * N + j] * b_part[j * N + k];
+                }
+            }
         }
-    
 
-        /* Enviar os resultados de volta para a tarefa mestre */
         mtype = FROM_WORKER;
         MPI_Send(&offset, 1, MPI_INT, MASTER, mtype, MPI_COMM_WORLD);
         MPI_Send(&rows, 1, MPI_INT, MASTER, mtype, MPI_COMM_WORLD);
-        MPI_Send(c, rows * N, MPI_DOUBLE, MASTER, mtype, MPI_COMM_WORLD);
+        MPI_Send(c_part, rows * N, MPI_DOUBLE, MASTER, mtype, MPI_COMM_WORLD);
+
+        free(b_part);
+        free(c_part);
     }
 
     free(a);
     free(b);
     free(c);
-
     MPI_Finalize();
 }
