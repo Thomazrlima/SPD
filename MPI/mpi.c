@@ -90,7 +90,7 @@ int main(int argc, char *argv[]) {
             rows = (dest <= extra) ? averow + 1 : averow;
             MPI_Send(&offset, 1, MPI_INT, dest, mtype, MPI_COMM_WORLD);
             MPI_Send(&rows, 1, MPI_INT, dest, mtype, MPI_COMM_WORLD);
-            MPI_Send(&b[0], N * N, MPI_DOUBLE, dest, mtype, MPI_COMM_WORLD); // Envia a matriz B inteira
+            MPI_Send(&b[0], N * N, MPI_DOUBLE, dest, mtype, MPI_COMM_WORLD);
             offset += rows;
         }
 
