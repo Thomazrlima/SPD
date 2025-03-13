@@ -12,7 +12,7 @@ fi
 
 echo "Teste,Tamanho,Real,User,Sys" > "$ARQUIVO_SAIDA"
 
-for i in {1..30}; do
+for i in {1..32}; do
     ARQUIVO_C="C_saida_${i}.txt"
     MATRIX_SIZE=$(wc -l < "$ARQUIVO_A")
 

@@ -6,7 +6,7 @@ if [ ! -f "$OUTPUT_CSV" ]; then
     echo "Teste,Tamanho,Real,User,Sys" > "$OUTPUT_CSV"
 fi
 
-for i in {1..30}
+for i in {1..32}
 do
     ARQUIVO_A="A.txt"
     ARQUIVO_B="B.txt"

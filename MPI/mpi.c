@@ -74,7 +74,6 @@ int main(int argc, char *argv[]) {
     numworkers = numtasks - 1;
 
     if (taskid == MASTER) {
-
         for (i = 0; i < N * N; i++) c[i] = 0.0;
 
         mtype = FROM_MASTER;

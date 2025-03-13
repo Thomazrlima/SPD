@@ -1,0 +1,119 @@
+Teste,Tamanho,Real,User,Sys
+1,512,Command,exited,with non-zero status 127
+2,512,Command,exited,with non-zero status 127
+3,512,Command,exited,with non-zero status 127
+4,512,Command,exited,with non-zero status 127
+5,512,Command,exited,with non-zero status 127
+6,512,Command,exited,with non-zero status 127
+7,512,Command,exited,with non-zero status 127
+8,512,Command,exited,with non-zero status 127
+9,512,Command,exited,with non-zero status 127
+10,512,Command,exited,with non-zero status 127
+11,512,Command,exited,with non-zero status 127
+12,512,Command,exited,with non-zero status 127
+13,512,Command,exited,with non-zero status 127
+14,512,Command,exited,with non-zero status 127
+15,512,Command,exited,with non-zero status 127
+16,512,Command,exited,with non-zero status 127
+17,512,Command,exited,with non-zero status 127
+18,512,Command,exited,with non-zero status 127
+19,512,Command,exited,with non-zero status 127
+20,512,Command,exited,with non-zero status 127
+21,512,Command,exited,with non-zero status 127
+22,512,Command,exited,with non-zero status 127
+23,512,Command,exited,with non-zero status 127
+24,512,Command,exited,with non-zero status 127
+25,512,Command,exited,with non-zero status 127
+26,512,Command,exited,with non-zero status 127
+27,512,Command,exited,with non-zero status 127
+28,512,Command,exited,with non-zero status 127
+29,512,Command,exited,with non-zero status 127
+30,512,Command,exited,with non-zero status 127
+1,512,Command,exited,with non-zero status 127
+2,512,Command,exited,with non-zero status 127
+3,512,Command,exited,with non-zero status 127
+4,512,Command,exited,with non-zero status 127
+5,512,Command,exited,with non-zero status 127
+6,512,Command,exited,with non-zero status 127
+7,512,Command,exited,with non-zero status 127
+8,512,Command,exited,with non-zero status 127
+9,512,Command,exited,with non-zero status 127
+10,512,Command,exited,with non-zero status 127
+11,512,Command,exited,with non-zero status 127
+12,512,Command,exited,with non-zero status 127
+13,512,Command,exited,with non-zero status 127
+14,512,Command,exited,with non-zero status 127
+15,512,Command,exited,with non-zero status 127
+16,512,Command,exited,with non-zero status 127
+1,512,Command,exited,with non-zero status 127
+2,512,Command,exited,with non-zero status 127
+3,512,Command,exited,with non-zero status 127
+4,512,Command,exited,with non-zero status 127
+5,512,Command,exited,with non-zero status 127
+6,512,Command,exited,with non-zero status 127
+7,512,Command,exited,with non-zero status 127
+8,512,Command,exited,with non-zero status 127
+9,512,Command,exited,with non-zero status 127
+10,512,Command,exited,with non-zero status 127
+11,512,Command,exited,with non-zero status 127
+12,512,Command,terminated,by signal 2
+13,512,Command,exited,with non-zero status 127
+14,512,Command,exited,with non-zero status 127
+15,512,Command,exited,with non-zero status 127
+16,512,Command,exited,with non-zero status 127
+17,512,Command,exited,with non-zero status 127
+18,512,Command,exited,with non-zero status 127
+19,512,Command,exited,with non-zero status 127
+20,512,Command,exited,with non-zero status 127
+1,512,Command,exited,with non-zero status 127
+2,512,Command,exited,with non-zero status 127
+3,512,Command,exited,with non-zero status 127
+4,512,Command,exited,with non-zero status 127
+5,512,Command,exited,with non-zero status 127
+6,512,Command,exited,with non-zero status 127
+7,512,Command,exited,with non-zero status 127
+8,512,Command,exited,with non-zero status 127
+9,512,Command,exited,with non-zero status 127
+10,512,Command,exited,with non-zero status 127
+11,512,Command,exited,with non-zero status 127
+12,512,Command,exited,with non-zero status 127
+13,512,Command,exited,with non-zero status 127
+1,512,Command,exited,with non-zero status 127
+2,512,Command,exited,with non-zero status 127
+3,512,Command,exited,with non-zero status 127
+4,512,Command,exited,with non-zero status 127
+5,512,Command,exited,with non-zero status 127
+6,512,Command,exited,with non-zero status 127
+7,512,Command,exited,with non-zero status 127
+8,512,Command,exited,with non-zero status 127
+9,512,Command,exited,with non-zero status 127
+1,512,3.25,1.61,0.07
+2,512,3.11,1.53,0.07
+3,512,2.91,1.88,0.09
+4,512,3.66,1.58,0.07
+5,512,3.58,2.34,0.11
+6,512,3.52,1.45,0.16
+7,512,4.14,1.56,0.09
+8,512,2.99,1.55,0.07
+9,512,3.33,1.65,0.10
+10,512,3.10,1.57,0.08
+11,512,3.19,1.62,0.06
+12,512,4.94,1.63,0.15
+13,512,3.52,1.67,0.09
+14,512,3.47,1.64,0.09
+15,512,3.07,1.57,0.11
+16,512,3.37,1.60,0.03
+17,512,2.86,1.58,0.07
+18,512,3.44,1.61,0.11
+19,512,3.42,1.59,0.14
+20,512,4.83,1.58,0.12
+21,512,3.40,1.45,0.09
+22,512,3.03,1.43,0.10
+23,512,2.94,1.55,0.04
+24,512,3.40,1.52,0.14
+25,512,2.93,1.52,0.12
+26,512,3.35,1.46,0.15
+27,512,3.07,1.46,0.10
+28,512,5.50,1.55,0.19
+29,512,4.92,1.69,0.13
+30,512,5.49,1.85,0.09
